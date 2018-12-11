@@ -1,0 +1,20 @@
+安装 mysql
+sudo apt-get install mysql-server
+使用命令检查启动
+systemctl status|start|stop|restart mysql
+          (检查) (启动)(关闭)(重启)
+          
+1、找回密码方式:(密码尽量使用大小写以及数字符号混合)
+  a、关闭数据库服务：systemctl stop mysql
+  b、在/etc/mysql/mysqld.cnf[my.cnf] 文件中mysql字段中加入 skip-grant-tables
+     参考位置：/etc/mysql/mysql.conf.d/mysqld.cnf
+  c、启动并使用mysql命令连接进入
+  d、1、创建一个新用户并授权：grant all on *.* to 'yourname'@'%' identified by 'yourpassword';
+     2、找回root密码：
+     update mysql.user set plugin='mysql_native_password',authentication_string=password('yourpassword') where user='root';
+  e、刷新权限：flush privileges;需要使用exit命令退出mysql   shell环境
+  f、进入配置文件:将bind  127.0.0.1 这一行注释掉  #用来打开远程访问限制
+                 将skip-grant-tables 注释掉
+  g、重启服务
+  h、验证：mysql -uroot -pyourpassword
+                 
